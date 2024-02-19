@@ -43,7 +43,7 @@ import (
 // Without any REST route, everything (almost) is handled by JS and GO
 // You have just to write the logic
 
-func sum(params GoRpcRequestParams) (string, *GoRpcError) {
+func sum(params GoRpcRequestParams) (any, *GoRpcError) {
 	fmt.Println("A: ", params["a"].Value)
 	fmt.Println("B: ", params["b"].Value)
 
@@ -59,27 +59,46 @@ func sum(params GoRpcRequestParams) (string, *GoRpcError) {
 		return "", err
 	}
 
-	return fmt.Sprintf("%d", int(a+b)), nil
+	return int(a+b), nil
+}
+
+func login(params GoRpcRequestParams) (any, *GoRpcError) {
+	fmt.Println("User: ", params["username"].Value)
+	fmt.Println("Password: ", params["password"].Value)
+
+	fmt.Println("username type: ", getType(params["username"].Value))
+	fmt.Println("password type: ", getType(params["password"].Value))
+
+	if ok, err := typeAssert(params["username"].Value, "string"); !ok {
+		return false, err
+	}
+
+	username, _ := params["username"].Value.(string) // type assertion
+
+	if ok, err := typeAssert(params["password"].Value, "string"); !ok {
+		return false, err
+	}
+
+	password, _ := params["password"].Value.(string) // type assertion
+
+	if username == "mario" && password == "bros" {
+		return true, nil
+	}
+
+	return false, nil
 }
 
 func main() {
 	funcMap := GoRpcFuncMap{
-		"sum": sum,
+		"sum":    sum,
+		"login":  login,
 	}
 
-	routes := HttpRoutesMap{
-		"POST": HttpRoute{
-			"/gorpc": func(w http.ResponseWriter, r *http.Request) {
-				goRpc(funcMap, w, r)
-			},
-		},
-	}
+	rpc := GoRPC{}
+
+	rpc.start("/gorpc", &funcMap)
 
 	fmt.Println("Starting GO RPC")
-
-	// http.HandleFunc("/", dispatchHttp)
-
-	dispatchRoutes(routes)
 
 	// http.HandleFunc("/gorpc", goRpc)
 
