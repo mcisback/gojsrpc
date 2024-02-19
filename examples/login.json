@@ -1,0 +1,11 @@
+{
+	"method": "login",
+	"params": {
+		"username": {
+			"value": "mario"
+		},
+		"password": {
+			"value": "bros"
+		}
+	}
+}

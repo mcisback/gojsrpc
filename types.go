@@ -20,14 +20,14 @@ type GoRpcRequest struct {
 
 type GoRpcResponse struct {
 	Success bool
-	Data    string
+	Data    any
 }
 
 type GoRpcError struct {
 	Message string
 }
 
-type GoRpcFuncMap map[string]func(GoRpcRequestParams) (string, *GoRpcError)
+type GoRpcFuncMap map[string]func(GoRpcRequestParams) (any, *GoRpcError)
 
 type HttpFunction func(w http.ResponseWriter, r *http.Request)
 type HttpRoutesMap map[string]HttpRoute

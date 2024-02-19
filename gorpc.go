@@ -7,14 +7,34 @@ import (
 	"net/http"
 )
 
-func goRpc(funcMap GoRpcFuncMap, w http.ResponseWriter, r *http.Request) {
+type GoRPC struct {
+	funcMap *GoRpcFuncMap
+}
+
+func (rpc *GoRPC) start(route string, funcMap *GoRpcFuncMap) {
+
+	rpc.funcMap = funcMap
+
+	http.HandleFunc(route, func(w http.ResponseWriter, r *http.Request) {
+
+		if !corsMiddleware(w, r) {
+			return
+		}
+
+		if r.Method != http.MethodPost {
+			fmt.Println("Method not allowed", r.Method)
+
+			w.WriteHeader(http.StatusMethodNotAllowed)
+
+			return
+		}
+
+		rpc.handleRPC(w, r)
+	})
+}
+
+func (rpc *GoRPC) handleRPC(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("New GoRpc Request: ", r.Method)
-
-	// if r.Method != http.MethodPost {
-	// 	fmt.Println("Method not allowed", r.Method)
-
-	// 	return
-	// }
 
 	reqBody, e := io.ReadAll(r.Body)
 
@@ -30,8 +50,9 @@ func goRpc(funcMap GoRpcFuncMap, w http.ResponseWriter, r *http.Request) {
 	fmt.Println("JSON REQUEST: ", goRpcRequest.Method)
 	fmt.Println("JSON REQUEST: ", goRpcRequest.Params)
 
-	value, err := funcMap[goRpcRequest.Method](goRpcRequest.Params)
+	handler := *rpc.funcMap
 
+	value, err := handler[goRpcRequest.Method](goRpcRequest.Params)
 	var response *GoRpcResponse
 
 	if err != nil {
