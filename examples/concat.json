@@ -2,10 +2,10 @@
 	"method": "concat",
 	"params": {
 		"a": {
-			"value": 23
+			"value": "paperino"
 		},
 		"b": {
-			"value": "dhauidhaui"
+			"value": " è figo"
 		}
 	}
 }

@@ -9,30 +9,26 @@ You define your function in main.go, and in AppRpc.js,
 for example:
 
 ```javascript
-// AppRpc.js
+// myApp.js
 
 import GoJsRpc from "./GoJsRpc";
 
-export default class AppRpc extends GoJsRpc {
-    constructor() {
-        super("http://localhost:3000/gorpc") // Define endpoint
-    }
+const rpc = new GoJsRpc("http://localhost:3000/gorpc")
 
-    async sum(params) {
-        const res = await this.call('sum', params) // Call go method
-
-        console.log('sum res: ', res)
-        console.log('success: ', res.data.Success)
-        console.log('sum res: ', res.data.Data)
-
-        if(res.data.Success === true) {
-            return res.data.Data
-        } else {
-            throw new Error(res.data.Data)
-        }
-    }
+let form = {
+    a: 0,
+    b: 0
 }
 
+let sum = null
+
+async function onFormSubmit() {
+	// Simple as that
+	// No infinte endpoint, no infinite code, just call the method and get the result
+    sum = await rpc.sum(form)
+
+    console.log('sum: ', sum)
+}
 ```
 
 ```golang

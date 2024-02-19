@@ -1,8 +1,8 @@
 <script>
 
-import AppRpc from "../rpc/AppRpc"
+import GoJsRpc from "../rpc/GoJsRpc";
 
-const rpc = new AppRpc()
+const rpc = new GoJsRpc("http://localhost:3000/gorpc")
 
 let form = {
     a: 0,
