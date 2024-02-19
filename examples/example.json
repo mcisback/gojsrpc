@@ -1,0 +1,11 @@
+{
+	"method": "sum",
+	"params": {
+		"a": {
+			"value": 23
+		},
+		"b": {
+			"value": 1321
+		}
+	}
+}

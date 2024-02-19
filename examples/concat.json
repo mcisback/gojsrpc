@@ -1,0 +1,11 @@
+{
+	"method": "concat",
+	"params": {
+		"a": {
+			"value": 23
+		},
+		"b": {
+			"value": "dhauidhaui"
+		}
+	}
+}
