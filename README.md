@@ -1,6 +1,7 @@
 # Go + JS Simple Custom RPC
 
 A go + js library custom RPC, made for study.
+This is not the standard RPC implementation.
 
 Compatible with every JS Framework
 
