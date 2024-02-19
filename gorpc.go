@@ -7,12 +7,7 @@ import (
 	"net/http"
 )
 
-var funcMap GoRpcFuncMap = GoRpcFuncMap{
-	"sum":    sum,
-	"concat": concat,
-}
-
-func goRpc(w http.ResponseWriter, r *http.Request) {
+func goRpc(funcMap GoRpcFuncMap, w http.ResponseWriter, r *http.Request) {
 	fmt.Println("New GoRpc Request: ", r.Method)
 
 	// if r.Method != http.MethodPost {

@@ -57,10 +57,16 @@ func hello(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	var funcMap GoRpcFuncMap = GoRpcFuncMap{
+		"sum":    sum,
+		"concat": concat,
+	}
 
 	routes := HttpRoutesMap{
 		"POST": HttpRoute{
-			"/gorpc": goRpc,
+			"/gorpc": func(w http.ResponseWriter, r *http.Request) {
+				goRpc(funcMap, w, r)
+			},
 		},
 		"GET": HttpRoute{
 			"/":      homePage,
