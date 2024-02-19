@@ -57,7 +57,7 @@ func hello(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	var funcMap GoRpcFuncMap = GoRpcFuncMap{
+	funcMap := GoRpcFuncMap{
 		"sum":    sum,
 		"concat": concat,
 	}
