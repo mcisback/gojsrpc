@@ -74,11 +74,47 @@ func login(params GoRpcRequestParams) (any, *GoRpcError) {
 	return false, nil
 }
 
+func complex(params GoRpcRequestParams) (any, *GoRpcError) {
+	fmt.Println("User: ", params["username"].Value)
+	fmt.Println("Password: ", params["password"].Value)
+
+	if ok, err := typeAssert(params["username"].Value, "string"); !ok {
+		return false, err
+	}
+
+	username, _ := params["username"].Value.(string) // type assertion
+
+	if ok, err := typeAssert(params["password"].Value, "string"); !ok {
+		return false, err
+	}
+
+	password, _ := params["password"].Value.(string) // type assertion
+
+	if username == "mario" && password == "bros" {
+		return struct {
+			Token    string `json:"token"`
+			Username string `json:"username"`
+			LoggedIn bool   `json:"loggedIn"`
+		}{
+			Token:    "UW4NdfucEqVlj8sAtD0APtOPipZlUvkRGozdUJ2tswUWZnx2Dni3EB0R49JCoto03GZzJmV0p8aJnovqQ1EndQtQxLYK4CpobPfT6i0lX15k9kkJrK8c5hkZH3sGc6nw",
+			Username: username,
+			LoggedIn: true,
+		}, nil
+	}
+
+	return struct {
+		LoggedIn bool `json:"loggedIn"`
+	}{
+		LoggedIn: false,
+	}, nil
+}
+
 func main() {
 	funcMap := GoRpcFuncMap{
-		"sum":    sum,
-		"concat": concat,
-		"login":  login,
+		"sum":     sum,
+		"concat":  concat,
+		"login":   login,
+		"complex": complex,
 	}
 
 	rpc := GoRPC{}
