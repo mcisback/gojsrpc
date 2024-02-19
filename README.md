@@ -66,10 +66,19 @@ func sum(params GoRpcRequestParams) (string, *GoRpcError) {
 }
 
 func main() {
+	var funcMap GoRpcFuncMap = GoRpcFuncMap{
+		"sum":    sum,
+	}
 
 	routes := HttpRoutesMap{
 		"POST": HttpRoute{
-			"/gorpc": goRpc,
+			"/gorpc": func(w http.ResponseWriter, r *http.Request) {
+				goRpc(funcMap, w, r)
+			},
+		},
+		"GET": HttpRoute{
+			"/":      homePage,
+			"/hello": hello,
 		},
 	}
 
