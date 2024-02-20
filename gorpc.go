@@ -11,7 +11,7 @@ type GoRPC struct {
 	funcMap *GoRpcFuncMap
 }
 
-func (rpc *GoRPC) start(route string, funcMap *GoRpcFuncMap) {
+func (rpc *GoRPC) New(route string, funcMap *GoRpcFuncMap) {
 
 	rpc.funcMap = funcMap
 
@@ -29,11 +29,11 @@ func (rpc *GoRPC) start(route string, funcMap *GoRpcFuncMap) {
 			return
 		}
 
-		rpc.handleRPC(w, r)
+		rpc.HandleRPC(w, r)
 	})
 }
 
-func (rpc *GoRPC) handleRPC(w http.ResponseWriter, r *http.Request) {
+func (rpc *GoRPC) HandleRPC(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("New GoRpc Request: ", r.Method)
 
 	reqBody, e := io.ReadAll(r.Body)
